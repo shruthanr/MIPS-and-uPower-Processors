@@ -73,7 +73,7 @@ module TestBench();
     initial
     begin
         rst = 1;
-        #60;
+        #40;
 
         rst = 0;
         RegWrite = 1;
@@ -83,7 +83,7 @@ module TestBench();
         RegDst = 0;
         ALUSrc = 1;
 
-        $display("\nCurrent Instructino: %32b", instruction);
+        // $display("\nCurrent Instructino: %32b", instruction);
 
         // instruction = 32'b10001100010000010000000000000001;
         ALU_OP = 4'b0010;

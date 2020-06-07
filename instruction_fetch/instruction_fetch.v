@@ -30,7 +30,7 @@ module Instruction_Fetch
     initial
     begin
         clk = 0;
-        #80;
+        #60;
         forever #20 clk = ~clk;
     end
 
