@@ -19,13 +19,20 @@ endmodule
 module Instruction_Fetch
 (
     input rst,
-    input clk,
     output [31:0] curr_instr
 );
 
     wire [31:0] PC;
     wire [31:0] curr_instr;
     wire [31:0] curr_line;
+
+    reg clk;
+    initial
+    begin
+        clk = 0;
+        #80;
+        forever #20 clk = ~clk;
+    end
 
     ProgramCounter p(.clk(clk), .rst(rst), .PC(PC));
 
