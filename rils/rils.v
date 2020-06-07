@@ -60,20 +60,20 @@ module TestBench();
     
     integer i;
 
-    Instruction_Fetch I(.rst(rst), .clk(clk), .curr_instr(instruction));
+    Instruction_Fetch I(.rst(rst), .curr_instr(instruction));
     load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst);
 
      /*Clock behaviour*/
     initial 
     begin
         clk = 0;
-        forever #40 clk = ~clk;
+        forever #10 clk = ~clk;
     end
 
     initial
     begin
         rst = 1;
-        #10;
+        #60;
 
         rst = 0;
         RegWrite = 1;
@@ -87,14 +87,14 @@ module TestBench();
 
         // instruction = 32'b10001100010000010000000000000001;
         ALU_OP = 4'b0010;
-        #59;
+        #39;
         $display("\nInstruction : lw R1, 1(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
 
         // instruction = 32'b10001100010000110000000000000010;
         ALU_OP = 4'b0010;
-        #59;
+        #39;
         $display("\nInstruction : lw R3, 2(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -106,7 +106,7 @@ module TestBench();
         
         // instruction = 32'b10101100101001010000000000000010;
         ALU_OP = 4'b0010;
-        #59;
+        #39;
         $display("\nInstruction : sw R5, 2(R5)"); // Contents of R5 to address pointed by (R5 + 2). Here 5 is stored in R5 
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -114,21 +114,21 @@ module TestBench();
 
         // instruction = 32'b10101100001001000000000000000010;
         ALU_OP = 4'b0010;
-        #59;
+        #39;
         $display("\nInstruction : sw R1, 2(R4)"); // Contents of R1 to address pointed by (R4 + 2). Here 4 is stored in R4 
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
 
         // instruction = 32'b10101100101010100000000000000011;
         ALU_OP = 4'b0010;
-        #59;
+        #39;
         $display("\nInstruction : sw R10, 3(R5)"); // Contents of R10 to address pointed by (R5 + 2). Here 5 is stored in R5 
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
         
         // instruction = 32'b10101100101011010000000000000100;
         ALU_OP = 4'b0010;
-        #59;
+        #39;
         $display("\nInstruction : sw R13, 4(R5)"); // Contents of R13 to address pointed by (R5 + 2). Here 5 is stored in R5 
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -142,7 +142,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 0;
-        #59;
+        #39;
         $display("\nInstruction : addi R17, R0, 20");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -151,7 +151,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 0;
         RegDst = 1;
-        #59;
+        #39;
         $display("\nInstruction : add R16, R0, R1");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -161,7 +161,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 0;
-        #59;
+        #39;
         $display("\nInstruction : addi R18, R2, 63");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -170,7 +170,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 0;
         RegDst = 1;
-        #59;
+        #39;
         $display("\nInstruction : add R19, R2, R3");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -179,7 +179,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 0;
-        #59;
+        #39;
         $display("\nInstruction : addi R20, R4, -1");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -188,7 +188,7 @@ module TestBench();
         ALU_OP = 4'b0110;
         ALUSrc = 0;
         RegDst = 1;
-        #59;
+        #39;
         $display("\nInstruction : sub R21, R9, R8");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -197,7 +197,7 @@ module TestBench();
         ALU_OP = 4'b0000;
         ALUSrc = 1;
         RegDst = 0;
-        #59;
+        #39;
         $display("\nInstruction : andi R22, R6, 0");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -206,7 +206,7 @@ module TestBench();
         ALU_OP = 4'b0001;
         ALUSrc = 1;
         RegDst = 0;
-        #59;
+        #39;
         $display("\nInstruction : ori R23, R8, 0");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -215,7 +215,7 @@ module TestBench();
         ALU_OP = 4'b0000;
         ALUSrc = 0;
         RegDst = 1;
-        #59;
+        #39;
         $display("\nInstruction : and R24, R6, R7");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -224,7 +224,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 0;
-        #59;
+        #39;
         $display("\nInstruction : addi R11, R11, -10");
         $display("\nCurrent Instructino: %32b", instruction);
         #1;
@@ -238,9 +238,9 @@ module TestBench();
     // initial
     // begin
     //     rst = 1;
-    //     #10;
+    //     #60;
 
-    //     $monitor("instruction %32b fetched", instruction);
+    //     $monitor("instruction %32b fetched at time %d", instruction, $time);
         
     //     #1000;
     //     $finish;
