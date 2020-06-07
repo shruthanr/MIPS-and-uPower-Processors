@@ -1,4 +1,4 @@
-`include "program_counter.v"
+// `include "../instruction_fetch/program_counter.v"
 
 module Instruction_Memory
 (
@@ -6,7 +6,7 @@ module Instruction_Memory
     output [31:0] curr_instr
 );
 
-    reg [31:0] instruction_memory [0:5];
+    reg [31:0] instruction_memory [0:100];
     initial
     begin
         $readmemb("instructions.mem", instruction_memory);

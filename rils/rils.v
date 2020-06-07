@@ -67,13 +67,13 @@ module TestBench();
     initial 
     begin
         clk = 0;
-        forever #29 clk = ~clk;
+        forever #40 clk = ~clk;
     end
 
     initial
     begin
         rst = 1;
-        #60;
+        #10;
 
         rst = 0;
         RegWrite = 1;
@@ -234,5 +234,16 @@ module TestBench();
         #10;
         $finish;
     end
+
+    // initial
+    // begin
+    //     rst = 1;
+    //     #10;
+
+    //     $monitor("instruction %32b fetched", instruction);
+        
+    //     #1000;
+    //     $finish;
+    // end
 
 endmodule
