@@ -4,8 +4,8 @@
 `include "utils/RegFile.v"
 `include "utils/dataMemory.v"
 `include "utils/Mux.v"
-`include "Instruction_Fetch/instruction_fetch.v"
-`include "Instruction_Fetch/program_counter.v"
+`include "instruction_fetch/instruction_fetch.v"
+`include "instruction_fetch/program_counter.v"
 
 module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, zero_flag, immediate);
 
