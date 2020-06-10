@@ -1,5 +1,3 @@
-// `include "../instruction_fetch/program_counter.v"
-
 module Instruction_Memory
 (
     input [31:0] curr_line,
