@@ -9,13 +9,15 @@
 // `include "../instruction_fetch/instructions.mem"
 // `include "../load-store/mem.dat"
 
-module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst);
+module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, zero_flag, immediate);
 
     parameter N = 32;
 
     input [N-1 : 0] instruction;
     input clk, rst, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst;
     input [3:0] ALU_OP;
+    output zero_flag;
+    output [31:0] immediate;
     
 
     wire [4:0] read_reg_1, read_reg_2, write_reg;
@@ -23,14 +25,13 @@ module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemR
     assign read_reg_2 = instruction[20:16];
     // assign write_reg = instruction[20:16];
 
+    wire [31:0] alu_in;
 
-    wire [31:0] immediate, alu_in;
     assign immediate = { {16{instruction[15]}}, instruction[15:0] };
     
-
     wire [N-1 : 0] data_out1, data_out2, result;
     wire [N-1 : 0] data_in;
-    wire cout, slt, overflow, zero_flag;
+    wire cout, slt, overflow;
     wire [31:0] writeAddress, writeData, readData, readAddress;
 
     
@@ -62,7 +63,9 @@ module TestBench();
     wire [3:0] ALU_OP;
     reg [5:0] alu_cu_in;
     wire [5:0] opcode, funct;
-
+    wire zero_flag;
+    wire [31:0] immediate;
+ 
     assign opcode = instruction[31:26];
     assign funct = instruction[5:0];
 
@@ -85,10 +88,10 @@ module TestBench();
     end
 
 
-    Instruction_Fetch I(.rst(rst), .curr_instr(instruction));
+    Instruction_Fetch I(.rst(rst), .curr_instr(instruction), .zero_flag(zero_flag), .immediate(immediate), .Branch(Branch));
     Control_Unit cu(opcode, RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, Branch, ALUOp1, ALUOp2);
     ALU_CU alucu(alu_cu_in, ALU_OP);
-    load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst);
+    load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, zero_flag, immediate);
 
      /*Clock behaviour*/
     initial 
@@ -112,6 +115,13 @@ module TestBench();
  */
         // $display("\nCurrent Instruction: %32b", instruction);
 
+        // instruction = 32'b00010000001000100000000000000001;
+        // ALU_OP = 4'b0110;
+        #39;
+        $display("\nInstruction : beq R1, R2, 1"); // Locations 1 to 10 in data memory have value 8 stored in them.
+        $display("\nCurrent Instruction: %32b", instruction);
+        #1;
+
         // instruction = 32'b10001100010000010000000000000001;
         // ALU_OP = 4'b0010;
         #39;
@@ -123,6 +133,13 @@ module TestBench();
         // ALU_OP = 4'b0010;
         #39;
         $display("\nInstruction : lw R3, 2(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
+        $display("\nCurrent Instruction: %32b", instruction);
+        #1;
+
+        // instruction = 32'b00010000001000110000000000000100;
+        // ALU_OP = 4'b0110;
+        #39;
+        $display("\nInstruction : beq R1, R3, 2");
         $display("\nCurrent Instruction: %32b", instruction);
         #1;
 
