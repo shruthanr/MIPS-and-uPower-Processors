@@ -26,6 +26,7 @@ module Instruction_Fetch
     wire [31:0] curr_line;
 
     reg clk;
+
     initial
     begin
         clk = 0;
@@ -43,61 +44,61 @@ module Instruction_Fetch
 
 endmodule
 
-// module Instruction_Fetch_tb;
+/* module Instruction_Fetch_tb;
 
-//     reg clk = 1'b0;
-//     reg rst = 1'b0;
-//     wire [31:0] curr_instr;
+    reg clk = 1'b0;
+    reg rst = 1'b0;
+    wire [31:0] curr_instr;
 
-//     always #100 clk = ~clk;
+    always #100 clk = ~clk;
 
-//     Instruction_Fetch I(.rst(rst), .clk(clk), .curr_instr(curr_instr));
+    Instruction_Fetch I(.rst(rst), .clk(clk), .curr_instr(curr_instr));
 
-//     initial
-//     begin
-//         rst = 1;
-//         #500;
+    initial
+    begin
+        rst = 1;
+        #500;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
+        rst = 0;
+        #100;
 
-//         rst = 0;
-//         #100;
-//     end
+        rst = 0;
+        #100;
+    end
 
-//     initial
-//     begin 
-//         $monitor("Current instruction is %32b at time %d", curr_instr, $time);
+    initial
+    begin 
+        $monitor("Current instruction is %32b at time %d", curr_instr, $time);
 
-//         #10000;
-//         $finish;
-//     end
+        #10000;
+        $finish;
+    end
 
-// endmodule
+endmodule */
