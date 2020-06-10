@@ -6,8 +6,6 @@
 `include "../utils/Mux.v"
 `include "../instruction_fetch/instruction_fetch.v"
 `include "../instruction_fetch/program_counter.v"
-// `include "../instruction_fetch/instructions.mem"
-// `include "../load-store/mem.dat"
 
 module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, zero_flag, immediate);
 
@@ -23,7 +21,6 @@ module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemR
     wire [4:0] read_reg_1, read_reg_2, write_reg;
     assign read_reg_1 = instruction[25:21];
     assign read_reg_2 = instruction[20:16];
-    // assign write_reg = instruction[20:16];
 
     wire [31:0] alu_in;
 
@@ -43,11 +40,6 @@ module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemR
     
     ALU_32 alu(data_out1, alu_in, ALU_OP, result, cout, slt, overflow, zero_flag);
     Mux_2_1_32 m3(result, readData, MemtoReg, data_in);
-    
-    always @(posedge clk) begin
-        // $display("data_in = %d, %d, %d, %d, %d, %d", result, readData, MemtoReg, data_in, MemRead, MemWrite);
-        // $display("dataout1 = %d, alu_in=%d %d %d ", data_out1, alu_in, read_reg_1, read_reg_2);
-    end
     
     assign readAddress = result;
     assign writeData = data_out2; 
@@ -100,194 +92,26 @@ module TestBench();
         forever #10 clk = ~clk;
     end
 
+    // Stop execution if all 1's instruction is encountered
+    always @(*)
+    begin
+        if (instruction == 32'b11111111111111111111111111111111)
+        begin
+            $finish();
+        end
+    end
+
+    initial
+    begin
+        #40;
+        $monitor("\nCurrent Instruction: %32b at time %d", instruction, $time);
+    end
+
     initial
     begin
         rst = 1;
         #40;
-
         rst = 0;
-/*         RegWrite = 1;
-        MemWrite = 0;
-        MemRead = 1;
-        MemtoReg = 1;
-        RegDst = 0;
-        ALUSrc = 1;
- */
-        // $display("\nCurrent Instruction: %32b", instruction);
-
-        // instruction = 32'b00010000001000100000000000000001;
-        // ALU_OP = 4'b0110;
-        #39;
-        $display("\nInstruction : beq R1, R2, 1"); // Locations 1 to 10 in data memory have value 8 stored in them.
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b10001100010000010000000000000001;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : lw R1, 1(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b10001100010000110000000000000010;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : lw R3, 2(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00010000001000110000000000000100;
-        // ALU_OP = 4'b0110;
-        #39;
-        $display("\nInstruction : beq R1, R3, 2");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        /* RegWrite = 0;
-        MemWrite = 1;
-        MemRead = 0; */
-
-        
-        // instruction = 32'b10101100101001010000000000000010;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : sw R5, 2(R5)"); // Contents of R5 to address pointed by (R5 + 2). Here 5 is stored in R5 
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-
-        // instruction = 32'b10101100001001000000000000000010;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : sw R1, 2(R4)"); // Contents of R1 to address pointed by (R4 + 2). Here 4 is stored in R4 
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b10101100101010100000000000000011;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : sw R10, 3(R5)"); // Contents of R10 to address pointed by (R5 + 2). Here 5 is stored in R5 
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-        
-        // instruction = 32'b10101100101011010000000000000100;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : sw R13, 4(R5)"); // Contents of R13 to address pointed by (R5 + 2). Here 5 is stored in R5 
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-    
-        /* MemtoReg = 0;
-        MemWrite = 0;
-        MemRead = 0;
-        RegWrite = 1; */
-
-        // instruction = 32'b00100000000100010000000000010100;
-        // ALU_OP = 4'b0010;
-        /* ALUSrc = 1;
-        RegDst = 0; */
-        #39;
-        $display("\nInstruction : addi R17, R0, 20");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-        
-        // instruction = 32'b00000000000000011000000000100000;
-        // ALU_OP = 4'b0010;
-        /* ALUSrc = 0;
-        RegDst = 1; */
-        #39;
-        $display("\nInstruction : add R16, R0, R1");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-
-        // instruction = 32'b00100000010100100000000000111111;
-        // ALU_OP = 4'b0010;
-        /* ALUSrc = 1;
-        RegDst = 0; */
-        #39;
-        $display("\nInstruction : addi R18, R2, 63");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00000000010000111001100000100000;
-        // ALU_OP = 4'b0010;
-        /* ALUSrc = 0;
-        RegDst = 1; */
-        #39;
-        $display("\nInstruction : add R19, R2, R3");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00100000100101001111111111111111;
-        // ALU_OP = 4'b0010;
-        /* ALUSrc = 1;
-        RegDst = 0; */
-        #39;
-        $display("\nInstruction : addi R20, R4, -1");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00000001001010001010100000100010;
-        // ALU_OP = 4'b0110;
-        /* ALUSrc = 0;
-        RegDst = 1; */
-        #39;
-        $display("\nInstruction : sub R21, R9, R8");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00110000110101100000000000000000;
-        // ALU_OP = 4'b0000;
-        /* ALUSrc = 1;
-        RegDst = 0; */
-        #39;
-        $display("\nInstruction : andi R22, R6, 0");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00110101000101110000000000000000;
-        // ALU_OP = 4'b0001;
-        /* ALUSrc = 1;
-        RegDst = 0; */
-        #39;
-        $display("\nInstruction : ori R23, R8, 0");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00000000110001111100000000100100;
-        // ALU_OP = 4'b0000;
-        /* ALUSrc = 0;
-        RegDst = 1; */
-        #39;
-        $display("\nInstruction : and R24, R6, R7");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-        // instruction = 32'b00100001011010111111111111110110;
-        // ALU_OP = 4'b0010;
-        /* ALUSrc = 1;
-        RegDst = 0; */
-        #39;
-        $display("\nInstruction : addi R11, R11, -10");
-        $display("\nCurrent Instruction: %32b", instruction);
-        #1;
-
-
-    
-        #10;
-        $finish;
     end
-
-    // initial
-    // begin
-    //     rst = 1;
-    //     #60;
-
-    //     $monitor("instruction %32b fetched at time %d", instruction, $time);
-        
-    //     #1000;
-    //     $finish;
-    // end
 
 endmodule
