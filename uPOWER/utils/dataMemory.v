@@ -1,13 +1,13 @@
 module DataMemory (writeAddress, writeData, readAddress, readData, MemWrite, MemRead, clk);
 
-input [31:0] writeAddress;
-input [31:0] writeData;
-input [31:0] readAddress;
+input [63:0] writeAddress;
+input [63:0] writeData;
+input [63:0] readAddress;
 input MemRead, MemWrite;
-output [31:0] readData;
+output [63:0] readData;
 input clk;
-reg [31:0] DMemory[0:127];
-reg[31:0] d_out;
+reg [63:0] DMemory[0:127];
+reg[63:0] d_out;
 
 initial begin
     $readmemb("mem.dat", DMemory, 0, 9);
@@ -16,9 +16,6 @@ end
 always @(*)
 begin
     if (MemRead) begin
-        /*if (MemWrite && writeAddress==readAddress) 
-            d_out = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
-        else */
             d_out = DMemory[readAddress];
     end
 end

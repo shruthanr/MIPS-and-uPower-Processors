@@ -73,40 +73,40 @@ module ALU_1
 
 endmodule
 
-module ALU_32
+module ALU_64
 (
-    input [31:0] A, B,
+    input [63:0] A, B,
     input [3:0] ALU_OP,
-    output [31:0] result,
+    output [63:0] result,
     output cout, slt, overflow, zero_flag
 );
     reg slt;
     reg zero_flag;
-    wire [32:0] C;
+    wire [64:0] C;
 
     assign C[0] = ALU_OP[2];
 
     genvar i;
 
     generate
-    for(i=0; i<32; i=i+1)
+    for(i=0; i<64; i=i+1)
     begin
         ALU_1 Al(.a(A[i]), .b(B[i]), .ALU_OP(ALU_OP), .cin(C[i]), .result(result[i]), .cout(C[i+1]));
     end
     endgenerate
 
-    assign cout = C[32];
+    assign cout = C[64];
 
-    assign overflow = C[32] ^ C[31];
+    assign overflow = C[64] ^ C[63];
 
     always@(*)
     begin
         if(ALU_OP[1:0] == 2'b11)
         begin
-            slt <= result[31];
+            slt <= result[63];
         end
 
-        if(result == 32'b0)
+        if(result == 64'b0)
         begin
             zero_flag <= 1;
         end

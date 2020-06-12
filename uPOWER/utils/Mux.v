@@ -20,9 +20,9 @@ module Mux_2_1_5 (a1, a2, s, res);
 endmodule
 
 
-module Mux_2_1_32 (a1, a2, s, res);  
+module Mux_2_1_64 (a1, a2, s, res);  
 
-    parameter N = 32;
+    parameter N = 64;
 
     input [N-1 : 0] a1, a2;
     input s;
