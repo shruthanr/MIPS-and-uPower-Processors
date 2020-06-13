@@ -1,7 +1,7 @@
-module Control_Unit(opcode, RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, Branch, ALUOp1, ALUOp2);
+module Control_Unit(opcode, RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, BranchEqual, BranchNotEqual, ALUOp1, ALUOp2);
 
     input [5:0] opcode;
-    output RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, Branch, ALUOp1, ALUOp2;
+    output RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, BranchEqual, BranchNotEqual, ALUOp1, ALUOp2;
 
     wire a, b, c, d, e, f;
 
@@ -13,12 +13,13 @@ module Control_Unit(opcode, RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrit
     assign f = opcode[0];
 
     assign RegDst = ~a & ~c;
-    assign ALUSrc = f | c;
+    assign ALUSrc = e | c;
     assign MemToReg = e;
     assign RegWrite = (~c & ~d) | (~a & c);
-    assign MemRead = ~c & f;
+    assign MemRead = ~c & e;
     assign MemWrite = c & e;
-    assign Branch = ~c & d;
+    assign BranchEqual = ~c & d & ~f;
+    assign BranchNotEqual = ~a & ~c & f;
     assign ALUOp1 = (~a & ~d) | (~a & c);
     assign ALUOp2 = d | (~a & c);
 
