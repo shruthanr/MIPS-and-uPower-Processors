@@ -16,8 +16,8 @@ endmodule
 
 module Instruction_Fetch
 (
-    input rst, Branch, zero_flag,
-    input [31:0] immediate,
+    input rst, 
+    // input [31:0] immediate,
     output [31:0] curr_instr
 );
 
@@ -35,8 +35,8 @@ module Instruction_Fetch
     end
 
     ProgramCounter p(.clk(clk), .rst(rst), .out_PC(PC), .in_PC(new_PC));
-    Update_PC upc(PC, new_PC, Branch, zero_flag, immediate);
-
+    // Update_PC upc(PC, new_PC, Branch, zero_flag, immediate);
+    
     reg [31:0] offset = 00000000000001000000000000000000;
     assign curr_line = (PC - offset)/4;
 

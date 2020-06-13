@@ -74,7 +74,7 @@ module RegFile_32_32 (data_out1, data_out2, reg_id_r1, reg_id_r2, reg_id_w, data
     begin
         #40;
         $display("\nThese are the contents of the register file at time %d : ", $time);
-        for(i=0; i<N; i=i+1)
+        for(i = 0; i < R; i = i + 1)
         begin
             $display("Register %d : %d", i, reg_file[i]);
         end
