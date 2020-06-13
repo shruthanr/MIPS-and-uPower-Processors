@@ -7,7 +7,7 @@ module Instruction_Memory
     reg [31:0] instruction_memory [0:100];
     initial
     begin
-        $readmemb("instructions.mem", instruction_memory);
+        $readmemb("Data_Instructions/instructions1.mem", instruction_memory);
     end
 
     assign curr_instr = instruction_memory[curr_line]; 
@@ -16,7 +16,7 @@ endmodule
 
 module Instruction_Fetch
 (
-    input rst, Branch, zero_flag,
+    input rst, BranchEqual, BranchNotEqual, zero_flag,
     input [31:0] immediate,
     output [31:0] curr_instr
 );
@@ -35,7 +35,7 @@ module Instruction_Fetch
     end
 
     ProgramCounter p(.clk(clk), .rst(rst), .out_PC(PC), .in_PC(new_PC));
-    Update_PC upc(PC, new_PC, Branch, zero_flag, immediate);
+    Update_PC upc(PC, new_PC, BranchEqual, BranchNotEqual, zero_flag, immediate);
 
     reg [31:0] offset = 00000000000001000000000000000000;
     assign curr_line = (PC - offset)/4;

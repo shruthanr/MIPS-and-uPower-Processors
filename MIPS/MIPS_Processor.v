@@ -51,7 +51,7 @@ module TestBench();
 
     wire [31:0] instruction;
     reg clk, rst;
-    wire RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, Branch, ALUOp1, ALUOp2;
+    wire RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, BranchEqual, BranchNotEqual, ALUOp1, ALUOp2;
     wire [3:0] ALU_OP;
     reg [5:0] alu_cu_in;
     wire [5:0] opcode, funct;
@@ -80,8 +80,8 @@ module TestBench();
     end
 
 
-    Instruction_Fetch I(.rst(rst), .curr_instr(instruction), .zero_flag(zero_flag), .immediate(immediate), .Branch(Branch));
-    Control_Unit cu(opcode, RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, Branch, ALUOp1, ALUOp2);
+    Instruction_Fetch I(.rst(rst), .curr_instr(instruction), .zero_flag(zero_flag), .immediate(immediate), .BranchEqual(BranchEqual), .BranchNotEqual(BranchNotEqual));
+    Control_Unit cu(opcode, RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, BranchEqual, BranchNotEqual, ALUOp1, ALUOp2);
     ALU_CU alucu(alu_cu_in, ALU_OP);
     load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, zero_flag, immediate);
 

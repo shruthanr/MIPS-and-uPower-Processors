@@ -2,7 +2,7 @@ module Update_PC
 (
     input [31:0] PC,
     output [31:0] new_PC,
-    input Branch, zero_flag,
+    input BranchEqual, BranchNotEqual, zero_flag,
     input [31:0] immediate
 );
 
@@ -10,7 +10,10 @@ module Update_PC
 
     assign Branch_Target = (immediate << 2) + PC + 4;
 
-    Mux_2_1_32 m4(PC+4, Branch_Target, (zero_flag & Branch), new_PC);
+    wire Branch_Condition;
+    assign Branch_Condition = (zero_flag & BranchEqual) | (~zero_flag & BranchNotEqual);
+
+    Mux_2_1_32 m4(PC+4, Branch_Target, Branch_Condition, new_PC);
 
 endmodule
 

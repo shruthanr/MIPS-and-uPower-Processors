@@ -10,7 +10,7 @@ reg [31:0] DMemory[0:127];
 reg[31:0] d_out;
 
 initial begin
-    $readmemb("mem.dat", DMemory, 0, 9);
+    $readmemb("Data_Instructions/mem1.dat", DMemory);
 end
 /* Read */
 always @(*)
@@ -19,7 +19,7 @@ begin
         /*if (MemWrite && writeAddress==readAddress) 
             d_out = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
         else */
-            d_out = DMemory[readAddress];
+            d_out = DMemory[readAddress/4];
     end
 end
 assign readData = d_out;
@@ -28,8 +28,8 @@ assign readData = d_out;
 /* Write */
 always @(posedge clk) 
 begin
-    if (MemWrite) begin 
-        DMemory[writeAddress] = writeData;
+    if (MemWrite && ($time-10)%40 != 0) begin 
+        DMemory[writeAddress/4] = writeData;
     end
 end
 integer i;
@@ -37,9 +37,9 @@ always
     begin
         #40;
         $display("\nThese are the contents of the data memory at time %d : ", $time);
-        for(i=0; i<10; i=i+1)
+        for(i=0; i<14; i=i+1)
         begin
-            $display("Loc %d : %d", i, DMemory[i]);
+            $display("Loc %d : %d", 4*i, DMemory[i]);
         end
     end
 
