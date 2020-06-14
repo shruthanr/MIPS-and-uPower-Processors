@@ -1,3 +1,11 @@
+/*
+    This is a 64-bit ALU with the following capabilities: 
+    Add, Subtract, AND, OR, NAND, NOR, slt, zero detection
+
+*/
+
+
+
 module And
 (
     input a, b,

@@ -14,13 +14,8 @@ module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemR
     input [31 : 0] instruction;
     input clk, rst, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, reg1, reg2; 
     input [3:0] ALU_OP;
-    
 
     wire [4:0] read_reg_1, read_reg_2, write_reg;
-    // assign read_reg_1 = instruction[25:21];
-    // assign read_reg_2 = instruction[20:16];
-    // assign write_reg = instruction[20:16];
-
 
     wire [N-1:0] alu_in;
     output reg [N-1:0] immediate;

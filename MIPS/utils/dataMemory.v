@@ -16,9 +16,6 @@ end
 always @(*)
 begin
     if (MemRead) begin
-        /*if (MemWrite && writeAddress==readAddress) 
-            d_out = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
-        else */
             d_out = DMemory[readAddress/4];
     end
 end

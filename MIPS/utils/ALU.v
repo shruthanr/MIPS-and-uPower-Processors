@@ -1,3 +1,10 @@
+/* 
+    32 bit ALU module capable of performing the following operations : 
+    Add, Subtract, AND, OR, NAND, NOR, set less than, zero detection
+    
+*/
+
+
 module And
 (
     input a, b,

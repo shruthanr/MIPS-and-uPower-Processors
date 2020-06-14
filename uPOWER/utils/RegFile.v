@@ -1,6 +1,6 @@
 
 /*
-* Register file with 32 registers. 32b per register.
+* Register file with 32 registers. 64b per register.
 * 2 read ports : reg_id_r1, data_out1; reg_id_r2, data_out2
 * 1 write port : reg_id_w, data_in
 * default : read from reg_id_r1, reg_id_r2
@@ -60,7 +60,7 @@ module RegFile_32_32 (data_out1, data_out2, reg_id_r1, reg_id_r2, reg_id_w, data
     initial 
     begin
         #5;
-        $readmemb("Data_and_Instructions/reg.dat", reg_file);
+        $readmemb("Data_and_Instructions/reg1.dat", reg_file);
     end
 
     /*Printing contents of register file at regular intervals*/

@@ -7,7 +7,7 @@ module Instruction_Memory
     reg [31:0] instruction_memory [0:100];
     initial
     begin
-        $readmemb("Data_and_Instructions/instructions.mem", instruction_memory);
+        $readmemb("Data_and_Instructions/instructions1.mem", instruction_memory);
     end
 
     assign curr_instr = instruction_memory[curr_line]; 
