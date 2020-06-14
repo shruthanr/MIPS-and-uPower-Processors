@@ -1,0 +1,27 @@
+	ADD AND/OR ADDI ANDI/ORI LD STD BEQ BNE
+
+RegDst:  0     1    0       1     0  X   X   X   
+reg1:    1     0    1       0     1  1   1   1
+reg2:    1     1    X       X     X  0   0   0
+ALUSrc:  0     0    1       1     1  1   0   0
+MemToReg:0     0    0       0     1  X   X   X
+RegWrite:1     1    1       1     1  0   0   0
+MemRead: 0     0    0       0     1  0   0   0
+MemWrite:0     0    0       0     0  1   0   1
+BEQ:     0     0    0       0     0  0   1   0
+BNE:     0     0    0       0     0  0   0   1
+
+if (RegDst == 0)
+	write_reg = instruction[25:21]
+else
+	write_reg = instruction[20:16]
+
+if (reg1 == 0)
+	read_reg_1 = instruction[25:21]
+else
+	read_reg_1 = instruction[20:16]
+
+if (reg2 == 0)
+	read_reg_2 = instruction[25:21]
+else
+	read_reg_2 = instruction[15:11]

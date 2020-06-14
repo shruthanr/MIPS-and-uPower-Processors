@@ -1,0 +1,63 @@
+Pseudocode to generate input signal for ALU Control Unit:
+
+Input: Opcode and Extended Opcode (if exists) of instruction.
+opcode as opcode[5:0]
+extended opcode as XO[n:0] where n = 8 or 9 depending on instruction format
+
+Output: 4 bit signal (mnpq) // input signal to ALU control unit
+
+if (opcode[0] == 0 or opcode = 1001)
+	signal = {opcode[4], opcode[2], opcode[5], opcode[0]}
+else
+	signal = {XO[7], XO[5], XO[4], opcode[0]} 
+
+Input : Encoding of operation from ALU Control Unit
+Output: 4 bit ALU_OP, representing A_invert (Ain), B_invert (Bin), Operation (2 bit: Op1, Op0)
+
+
+Operation	m n p q 	Ain Bin Op1 Op0
+-		0 0 0 0 	 X   X   X   X	
+add		0 0 0 1		 0   0   1   0
+- 		0 0 1 0 	 X   X   X   X
+and 		0 0 1 1		 0   0   0   0
+addi  		0 1 0 0		 0   0   1   0
+subf 		0 1 0 1 	 0   1   1   0
+-		0 1 1 0 	 X   X   X   X
+- 		0 1 1 1 	 X   X   X   X
+ori 		1 0 0 0 	 0   0   0   1
+bc 		1 0 0 1 	 0   1   1   0
+ld 		1 0 1 0          0   0   1   0
+nand 		1 0 1 1          1   1   0   1
+andi            1 1 0 0 	 0   0   0   0
+- 		1 1 0 1 	 X   X   X   X
+std 		1 1 1 0 	 0   0   1   0
+or 		1 1 1 1          0   0   0   1  
+
+From the above truth table, we have:
+
+Ain = m & (~n) & p & q
+Bin = q & (m ^ n)
+Op1 = ((~m) & (~p)) | (p ^ q)
+Op0 = ((~n) & (~q) & (~p)) | (p & q & m)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
