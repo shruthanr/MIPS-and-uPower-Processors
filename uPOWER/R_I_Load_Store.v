@@ -3,12 +3,12 @@
 `include "./utils/dataMemory.v"
 `include "./utils/Mux.v"
 
-module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, XO);
+module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, reg1, reg2);
 
     parameter N = 64;
 
     input [31 : 0] instruction;
-    input clk, rst, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, XO; 
+    input clk, rst, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, reg1, reg2; 
     input [3:0] ALU_OP;
     
 
@@ -32,15 +32,14 @@ module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemR
     wire [N-1 : 0] data_in;
     wire cout, slt, overflow, zero_flag;
     wire [N-1:0] writeAddress, writeData, readData, readAddress;
-    wire [1:0] reg2;
-    assign reg2[0] = XO;
-    assign reg2[1] = MemWrite;
+   
+  
 
     
     Mux_2_1_5 m1(instruction[20:16], instruction[25:21], RegDst, write_reg);
     Mux_2_1_64 m2(data_out2, immediate, ALUSrc, alu_in);
-    Mux_2_1_5 m3(instruction[25:21], instruction[20:16], XO, read_reg_1);
-    Mux_4_1_5 m4(instruction[20:16], instruction[15:11], 5'b0, instruction[25:21], reg2, read_reg_2);
+    Mux_2_1_5 m3(instruction[25:21], instruction[20:16], reg1, read_reg_1);
+    Mux_2_1_5 m4(instruction[25:21], instruction[15:11], reg2, read_reg_2);
     
     
     DataMemory D(writeAddress, writeData, readAddress, readData, MemWrite, MemRead, clk);
@@ -59,12 +58,12 @@ endmodule
 module TestBench();
 
     reg [31:0] instruction;
-    reg clk, rst, RegWrite, MemWrite, MemRead, MemtoReg, ALUSrc, RegDst, XO;
+    reg clk, rst, RegWrite, MemWrite, MemRead, MemtoReg, ALUSrc, RegDst, reg1, reg2;
     reg [3:0] ALU_OP;
     
     integer i;
 
-    load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, XO);
+    load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemtoReg, ALUSrc, RegDst, reg1, reg2);
 
      /*Clock behaviour*/
     initial 
@@ -85,28 +84,28 @@ module TestBench();
         MemtoReg = 1;
         RegDst = 1;
         ALUSrc = 1;
+        reg1 = 1;
 
         instruction = 32'b11101000001000100000000000000100;
         ALU_OP = 4'b0010;
-        XO = 0;
         #39;
         $display("\nInstruction : ld R1, 1(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
         #1;
 
         instruction = 32'b11101000011000100000000000001000;
         ALU_OP = 4'b0010;
-        XO = 0;
+        
         #39;
         $display("\nInstruction : ld R3, 2(R2)"); // Locations 1 to 10 in data memory have value 8 stored in them.
         #1;
         RegWrite = 0;
         MemWrite = 1;
         MemRead = 0;
+        reg2 = 9;
 
         
         instruction = 32'b11111000101000100000000000001000;
         ALU_OP = 4'b0010;
-        XO = 1;
         #39;
         $display("\nInstruction : std R5, 2(R2)"); // Contents of R5 to address pointed by (R5 + 2). Here 5 is stored in R5 
         #1;
@@ -114,7 +113,6 @@ module TestBench();
 
         instruction = 32'b11111000001001000000000000001000;
         ALU_OP = 4'b0010;
-        XO = 1;
         #39;
         $display("\nInstruction : std R1, 2(R4)"); // Contents of R1 to address pointed by (R4 + 2). Here 4 is stored in R4 
         #1;
@@ -140,7 +138,6 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 1;
-        XO = 1;
         #39;
         $display("\nInstruction : addi R17, R0, 20");
         #1;
@@ -149,7 +146,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 0;
         RegDst = 1;
-        XO = 1;
+        reg2 = 1;
         #39;
         $display("\nInstruction : add R16, R0, R1");
         #1;
@@ -159,7 +156,6 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 1;
-        XO = 1;
         #39;
         $display("\nInstruction : addi R18, R2, 63");
         #1;
@@ -168,7 +164,6 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 0;
         RegDst = 1;
-        XO = 1;
         #39;
         $display("\nInstruction : add R19, R2, R3");
         #1;
@@ -177,7 +172,6 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 1;
-        XO = 1;
         #39;
         $display("\nInstruction : addi R20, R4, -1");
         #1;
@@ -194,7 +188,7 @@ module TestBench();
         ALU_OP = 4'b0000;
         ALUSrc = 1;
         RegDst = 0;
-        XO = 0;
+        reg1 = 0;
         #39;
         $display("\nInstruction : andi R22, R6, 0");
         #1;
@@ -203,7 +197,6 @@ module TestBench();
         ALU_OP = 4'b0001;
         ALUSrc = 1;
         RegDst = 0;
-        XO = 0;
         #39;
         $display("\nInstruction : ori R23, R8, 0");
         #1;
@@ -212,7 +205,8 @@ module TestBench();
         ALU_OP = 4'b0000;
         ALUSrc = 0;
         RegDst = 0;
-        XO = 1;
+        reg1 = 0;
+        reg2 = 1;
         #39;
         $display("\nInstruction : and R24, R6, R7");
         #1;
@@ -221,7 +215,7 @@ module TestBench();
         ALU_OP = 4'b0010;
         ALUSrc = 1;
         RegDst = 1;
-        XO = 1;
+        reg1 = 1;
         #39;
         $display("\nInstruction : addi R11, R11, -10");
         #1;

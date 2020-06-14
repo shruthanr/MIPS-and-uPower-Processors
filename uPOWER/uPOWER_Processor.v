@@ -95,7 +95,7 @@ module TestBench();
         // bne = 0;
         
         #39;
-        $display("\nInstruction : beq R1, R2, 1 \n %b", instruction); // Locations 1 to 10 in data memory have value 8 stored in them.
+        $display("\nInstruction : beq R1, R2, 10 \n %b", instruction); // Locations 1 to 10 in data memory have value 8 stored in them.
         $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
         #1;
 

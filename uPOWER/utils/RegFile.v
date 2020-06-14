@@ -9,7 +9,7 @@
 
 module RegFile_32_32 (data_out1, data_out2, reg_id_r1, reg_id_r2, reg_id_w, data_in, wr, rst, clk);
 
-    parameter N = 64;   // 32b register
+    parameter N = 64;   // 64b register
     parameter R = 32;   // 32 registers
     // Regsiter address - 5b = log_2(R)
     parameter ASIZE = $clog2(R);
