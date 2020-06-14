@@ -1,0 +1,8 @@
+.data
+label: .word 1, 2, 3
+label1: .asciiz "Hello, WOrld"
+label2: .byte 12
+label3: .half 15
+.text
+main:
+addi 1, 1, 2

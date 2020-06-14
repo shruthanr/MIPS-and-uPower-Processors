@@ -1,0 +1,7 @@
+.text
+main:
+addi 30, 30, 5
+sys
+addi 30, 0, 1
+add 29, 0, 28
+sys

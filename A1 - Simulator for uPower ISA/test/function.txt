@@ -1,0 +1,9 @@
+.data
+A: .word 12
+.text
+me:
+addi 1, 1, 3
+bclr
+main:
+addi 1, 1, 3
+bl me
