@@ -19,6 +19,46 @@ module Mux_2_1_5 (a1, a2, s, res);
 
 endmodule
 
+module Mux_2_1_4 (a1, a2, s, res);  
+
+    parameter N = 4;
+
+    input [N-1 : 0] a1, a2;
+    input s;
+    output [N-1 : 0] res;
+
+    reg [N-1 : 0] A;
+    always @(*)
+    begin
+        case (s)
+            1'b0 : A <= a1;
+            1'b1 : A <= a2;
+        endcase
+    end
+    
+    assign res = A;
+
+endmodule
+
+module Mux_2_1_1 (a1, a2, s, res);  
+
+    input a1, a2;
+    input s;
+    output res;
+
+    reg A;
+    always @(*)
+    begin
+        case (s)
+            1'b0 : A <= a1;
+            1'b1 : A <= a2;
+        endcase
+    end
+    
+    assign res = A;
+
+endmodule
+
 module Mux_3_1_5 (a1, a2, a3, s, res);  
 
     parameter N = 5;
