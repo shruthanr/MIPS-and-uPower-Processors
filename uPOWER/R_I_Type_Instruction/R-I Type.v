@@ -1,14 +1,14 @@
-`include "ALU.v"
-`include "RegFile.v"
-`include "Mux.v"
+`include "../utils/ALU.v"
+`include "../utils/RegFile.v"
+`include "../utils/Mux.v"
 
-/*This module can execute MIPS R-type as well as I-type ALU instructions like add, addi, and, andi, or, ori.*/
+/*This module can execute uPower instructions like add, addi, and, andi, or, ori.*/
 
 module R_I_Type_Instructions (instruction, clk, rst, ALU_OP, RegWrite, RegDst, ALUSrc, XO);
 
-    parameter N = 32;
+    parameter N = 64;
 
-    input [N-1 : 0] instruction;
+    input [31 : 0] instruction;
     input clk, rst;
     input RegWrite, RegDst, ALUSrc, XO; // Datapath control signals associated with this module
     input [3:0] ALU_OP; // ALU control signal which is given by the ALU Control Unit
@@ -21,18 +21,18 @@ module R_I_Type_Instructions (instruction, clk, rst, ALU_OP, RegWrite, RegDst, A
     // assign reg_id_r1 = instruction[25:21];
     assign reg_id_r2 = instruction[15:11];
 
-    wire [31:0] immediate;
-    assign immediate = { {16{instruction[15]}}, instruction[15:0] };
-    wire [31:0] alu_in;
+    wire [63:0] immediate;
+    assign immediate = { {48{instruction[15]}}, instruction[15:0] };
+    wire [63:0] alu_in;
 
     Mux_2_1_5 m1(instruction[20:16], instruction[25:21], XO, reg_id_w);
     Mux_2_1_5 m2(instruction[25:21], instruction[20:16], XO, reg_id_r1);
 
-    Mux_2_1_32 m3(data_out2, immediate, ALUSrc, alu_in);
+    Mux_2_1_64 m3(data_out2, immediate, ALUSrc, alu_in);
 
     RegFile_32_32 RF(data_out1, data_out2, reg_id_r1, reg_id_r2, reg_id_w, data_in, RegWrite, rst, clk);
 
-    ALU_32 alu(data_out1, alu_in, ALU_OP, result, cout, slt, overflow, zero_flag);
+    ALU_64 alu(data_out1, alu_in, ALU_OP, result, cout, slt, overflow, zero_flag);
 
     assign data_in = result;
     

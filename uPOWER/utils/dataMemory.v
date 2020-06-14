@@ -10,7 +10,7 @@ reg [63:0] DMemory[0:127];
 reg[63:0] d_out;
 
 initial begin
-    $readmemb("mem.dat", DMemory, 0, 9);
+    $readmemb("Data_and_Instructions/mem.dat", DMemory, 0, 9);
 end
 /* Read */
 always @(*)

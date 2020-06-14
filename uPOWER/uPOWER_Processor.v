@@ -78,11 +78,25 @@ module TestBench();
         forever #10 clk = ~clk;
     end
 
+    // Stop execution if all 1's instruction is encountered
+    always @(*)
+    begin
+        if (instruction == 32'b11111111111111111111111111111111)
+        begin
+            $finish();
+        end
+    end
+
+    initial
+    begin
+        #40;
+        $monitor("\nCurrent Instruction: %32b at time %d", instruction, $time);
+    end
+
     initial
     begin
         rst = 1;
         #40;
-
         rst = 0;
         // RegWrite = 1;
         // MemWrite = 0;
