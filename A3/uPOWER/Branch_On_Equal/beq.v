@@ -5,18 +5,19 @@
 
 module beq_instruction(instruction, clk, rst, ALU_OP, RegWrite, pc, branchTarget);
 
-    parameter N = 32;
+    parameter N = 64;
 
-    input [N-1 : 0] instruction, pc;
+    input [31 : 0] instruction;
+    input [N-1: 0] pc;
     input clk, rst, RegWrite;
     input [3:0] ALU_OP;
-    output [31:0] branchTarget;
+    output [N-1:0] branchTarget;
     wire [4:0] read_reg_1, read_reg_2, write_reg;
     assign read_reg_1 = instruction[25:21];
     assign read_reg_2 = instruction[20:16];
   
-    wire [31:0] immediate;
-    assign immediate = { {16{instruction[15]}}, instruction[15:0] } << 2;
+    wire [63:0] immediate;
+    assign immediate = { {48{instruction[15]}}, instruction[15:0] } << 2;
 
     wire [N-1 : 0] data_out1, data_out2, result;
     wire [N-1 : 0] data_in;
@@ -24,7 +25,7 @@ module beq_instruction(instruction, clk, rst, ALU_OP, RegWrite, pc, branchTarget
 
     RegFile_32_32 RF(data_out1, data_out2, read_reg_1, read_reg_2, write_reg, data_in, RegWrite, rst, clk);
 
-    ALU_32 alu(data_out1, data_out2, ALU_OP, result, cout, slt, overflow, zero_flag);
+    ALU_64 alu(data_out1, data_out2, ALU_OP, result, cout, slt, overflow, zero_flag);
 
     assign branchTarget = pc + immediate + 32'b00000000000000000000000000000100; // pc + left-shifted-immediate + 4
 
@@ -32,8 +33,9 @@ endmodule
 
 module TestBench();
 
-    reg [31:0] instruction, pc;
-    wire [31:0] branchTarget;
+    reg [31:0] instruction;
+    reg [63:0] pc;
+    wire [63:0] branchTarget;
     reg clk, rst, RegWrite;
     reg [3:0] ALU_OP;
     integer i;
