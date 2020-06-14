@@ -7,7 +7,7 @@
 `include "instruction_fetch/instruction_fetch.v"
 `include "instruction_fetch/program_counter.v"
 
-module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, reg1, reg2);
+module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, reg1, reg2, zero_flag);
 
     parameter N = 64;
 
@@ -62,14 +62,14 @@ module TestBench();
 
     wire [31:0] instruction;
     reg clk, rst;
-    wire RegWrite, MemWrite, MemRead, MemToReg, ALUSrc, RegDst, reg1, reg2, beq, bne;
+    wire RegWrite, MemWrite, MemRead, MemToReg, ALUSrc, RegDst, reg1, reg2, beq, bne, zero_flag;
     wire [3:0] ALU_OP;
     wire [63:0] immediate;
     
     integer i;
-    Instruction_Fetch I(.rst(rst), .curr_instr(instruction));
+    Instruction_Fetch I(.rst(rst), .curr_instr(instruction), .zero_flag(zero_flag), .immediate(immediate), .BranchEqual(beq), .BranchNotEqual(bne));
     Control_Unit cu(instruction[31:26], instruction[10:1], RegDst, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, reg1, reg2, ALU_OP);
-    load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, reg1, reg2);
+    load_store_R_I_instruction L(instruction, clk, rst, ALU_OP, RegWrite, MemRead, MemWrite, MemToReg, ALUSrc, RegDst, reg1, reg2, zero_flag);
 
      /*Clock behaviour*/
     initial 

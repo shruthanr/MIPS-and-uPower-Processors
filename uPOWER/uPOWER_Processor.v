@@ -38,7 +38,7 @@ module load_store_R_I_instruction (instruction, clk, rst, ALU_OP, RegWrite, MemR
     DataMemory D(writeAddress, writeData, readAddress, readData, MemWrite, MemRead, clk);
     RegFile_32_32 RF(data_out1, data_out2, read_reg_1, read_reg_2, write_reg, data_in, RegWrite, rst, clk);
     
-    ALU_32 alu(data_out1, alu_in, ALU_OP, result, cout, slt, overflow, zero_flag);
+    ALU_64 alu(data_out1, alu_in, ALU_OP, result, cout, slt, overflow, zero_flag);
     Mux_2_1_32 m3(result, readData, MemtoReg, data_in);
     
     assign readAddress = result;
