@@ -56,17 +56,11 @@ module RegFile_32_32 (data_out1, data_out2, reg_id_r1, reg_id_r2, reg_id_w, data
         end
     end
 
-    /*Writing sample data into register file, for testing purpose.*/
-    initial
+    /* Initializing register file */
+    initial 
     begin
-        i = 0;
-        #10;
-        $display("\nWriting data into registers : \n");
-        for(i=0; i<N/2; i=i+1)
-        begin
-            reg_file[i] = i;
-            $display("%d written into register %d", i, i);
-        end
+        #5;
+        $readmemb("Data_and_Instructions/reg.dat", reg_file);
     end
 
     /*Printing contents of register file at regular intervals*/

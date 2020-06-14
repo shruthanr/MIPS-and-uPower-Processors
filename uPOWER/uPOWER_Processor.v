@@ -78,159 +78,26 @@ module TestBench();
         forever #10 clk = ~clk;
     end
 
+    // Stop execution if all 1's instruction is encountered
+    always @(*)
+    begin
+        if (instruction == 32'b11111111111111111111111111111111)
+        begin
+            $finish();
+        end
+    end
+
+    initial
+    begin
+        #40;
+        $monitor("\nCurrent Instruction: %32b at time %d", instruction, $time);
+    end
+
     initial
     begin
         rst = 1;
         #40;
-
         rst = 0;
-        // RegWrite = 1;
-        // MemWrite = 0;
-        // MemRead = 1;
-        // MemToReg = 1;
-        // RegDst = 0;
-        // ALUSrc = 1;
-        // reg1 = 1;
-        // beq = 0;
-        // bne = 0;
-        
-        #39;
-        $display("\nInstruction : beq R1, R2, 1 \n %b", instruction); // Locations 1 to 10 in data memory have value 8 stored in them.
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        
-        // instruction = 32'b11101000001000100000000000000100;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : ld R1, 1(R2) \n %b", instruction); // Locations 1 to 10 in data memory have value 8 stored in them.
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b11101000011000100000000000001000;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : ld R3, 2(R2) \n %b", instruction); // Locations 1 to 10 in data memory have value 8 stored in them.
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // RegWrite = 0;
-        // MemWrite = 1;
-        // MemRead = 0;
-        // reg2 = 0;
-
-        // instruction = 32'b11111000101000100000000000001000;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : std R5, 2(R2) \n %b", instruction); // Contents of R5 to address pointed by (R5 + 2). Here 5 is stored in R5 
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-
-        // instruction = 32'b11111000001001000000000000001000;
-        // ALU_OP = 4'b0010;
-        #39;
-        $display("\nInstruction : std R1, 2(R4) \n %b", instruction); // Contents of R1 to address pointed by (R4 + 2). Here 4 is stored in R4 
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-        
-    
-        // MemToReg = 0;
-        // MemWrite = 0;
-        // MemRead = 0;
-        // RegWrite = 1;
-        
-        // instruction = 32'b00111010001000000000000000010100;
-        // ALU_OP = 4'b0010;
-        // ALUSrc = 1;
-        // RegDst = 0;
-        #39;
-        $display("\nInstruction : addi R17, R0, 20");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-        
-        // instruction = 32'b01111110000000000000101000010100;
-        // ALU_OP = 4'b0010;
-        // ALUSrc = 0;
-        // RegDst = 0;
-        // reg2 = 1;
-        #39;
-        $display("\nInstruction : add R16, R0, R1");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-
-        // instruction = 32'b00111010010000100000000000111111;
-        // ALU_OP = 4'b0010;
-        // ALUSrc = 1;
-        #39;
-        $display("\nInstruction : addi R18, R2, 63");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b01111110011000100001101000010100;
-        // ALU_OP = 4'b0010;
-        // ALUSrc = 0;
-        #39;
-        $display("\nInstruction : add R19, R2, R3");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b00111010100001001111111111111111;
-        // ALU_OP = 4'b0010;
-        // ALUSrc = 1;
-        #39;
-        $display("\nInstruction : addi R20, R4, -1");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b00000001001010001010100000100010;
-        // ALU_OP = 4'b0110;
-        // ALUSrc = 0;
-        // RegDst = 1;
-        // #39;
-        // $display("\nInstruction : sub R21, R9, R8");
-        // #1;
-
-        // instruction = 32'b01110000110101100000000000000000;
-        // ALU_OP = 4'b0000;
-        // RegDst = 1;
-        // reg1 = 0;
-        #39;
-        $display("\nInstruction : andi R22, R6, 0");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b01100001000101110000000000000000;
-        // ALU_OP = 4'b0001;
-        #39;
-        $display("\nInstruction : ori R23, R8, 0");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b01111100110110000011100000111001;
-        // ALU_OP = 4'b0000;
-        // ALUSrc = 0;
-        // RegDst = 1;
-        // reg1 = 0;
-        // reg2 = 1;
-        #39;
-        $display("\nInstruction : and R24, R6, R7");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        // instruction = 32'b01100001011010111111111111110110;
-        // ALU_OP = 4'b0010;
-        // ALUSrc = 1;
-        // RegDst = 0;
-        // reg1 = 1;
-        #39;
-        $display("\nInstruction : addi R11, R11, -10");
-        $display("Control signals : %b, %b, %b, %b, %b, %b, %b, %b, %b, %b, %b", RegDst, reg1, reg2, ALUSrc, MemToReg, RegWrite, MemRead, MemWrite, beq, bne, ALU_OP);
-        #1;
-
-        #10;
-        $finish;
     end
 
 endmodule
