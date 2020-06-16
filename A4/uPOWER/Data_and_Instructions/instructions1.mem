@@ -9,7 +9,7 @@
 11111111111111111111111111111111
 
 
-The above binary encodes the MIPS program : 
+The above binary encodes the uPOWER program : 
 ld R1, 0(R0)
 addi R2, R2, 1
 ld R3, 0(R2)
