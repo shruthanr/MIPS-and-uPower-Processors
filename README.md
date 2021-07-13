@@ -1,6 +1,6 @@
-# A1
-Building a simulator for the uPower ISA using Python
-# A3-A4
+# Assembler and Simular for uPower ISA
+An assembler to generate binaries for uPower ISA and simulate execution on a siulator built using Python
+# MIPS and uPower processors
 Integrating Verilog modules to build datapaths for MIPS and uPower ISAs
 
 Team (alphabetical):
